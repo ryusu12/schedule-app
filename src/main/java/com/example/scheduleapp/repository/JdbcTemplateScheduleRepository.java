@@ -2,14 +2,16 @@ package com.example.scheduleapp.repository;
 
 import com.example.scheduleapp.dto.ScheduleResponseDto;
 import com.example.scheduleapp.entity.Schedule;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.sql.DataSource;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class JdbcTemplateScheduleRepository implements ScheduleRepository {
@@ -20,6 +22,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    /*생성*/
     @Override
     public ScheduleResponseDto saveSchedule(Schedule schedule) {
         SimpleJdbcInsert insert = new SimpleJdbcInsert(this.jdbcTemplate);
@@ -37,8 +40,46 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         return new ScheduleResponseDto(key.longValue(), schedule);
     }
 
+    /*조회*/
+    @Override
+    public List<ScheduleResponseDto> findAllSchedules(String name, Date updateDate) {
+        StringBuilder sql = new StringBuilder("SELECT * FROM schedule WHERE 1=1 ");
+        List<Object> params = new ArrayList<>();
+
+        if (name != null) {
+            sql.append("AND create_name = ? ");
+            params.add(name);
+        }
+        if (updateDate != null) {
+            sql.append("AND update_date = ? ");
+            params.add(updateDate);
+        }
+        sql.append("ORDER BY update_date DESC");
+
+        return jdbcTemplate.query(sql.toString(), scheduleRowMapper(), params.toArray());
+    }
+
+    @Override
+    public ScheduleResponseDto findScheduleByIdOrElseThrow(Long id) {
+        List<ScheduleResponseDto> result = jdbcTemplate.query("select * from schedule where schedule_id = ? ORDER BY update_date DESC", scheduleRowMapper(), id);
+        return result.stream().findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist schedule_id = " + id));
+    }
+
+    /*삭제*/
     @Override
     public int removeScheduleById(Long id) {
         return jdbcTemplate.update("delete from schedule where schedule_id = ?", id);
+    }
+
+    /*Mapper*/
+    private RowMapper<ScheduleResponseDto> scheduleRowMapper() {
+        return (rs, rowNum) -> new ScheduleResponseDto(
+                rs.getLong("schedule_id"),
+                rs.getString("todo"),
+                rs.getString("create_name"),
+                rs.getString("password"),
+                rs.getDate("create_date"),
+                rs.getDate("update_date")
+        );
     }
 }

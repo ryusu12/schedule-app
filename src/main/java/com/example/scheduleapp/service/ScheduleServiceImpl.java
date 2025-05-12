@@ -7,6 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Date;
+import java.util.List;
+
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
 
@@ -16,6 +19,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         this.scheduleRepository = scheduleRepository;
     }
 
+    /*생성*/
     @Override
     public ScheduleResponseDto saveSchedule(String todo, String name, String password) {
         if (todo == null || name == null || password == null) {
@@ -25,6 +29,18 @@ public class ScheduleServiceImpl implements ScheduleService {
         return scheduleRepository.saveSchedule(schedule);
     }
 
+    /*조회*/
+    @Override
+    public List<ScheduleResponseDto> getAllSchedules(String name, Date updateDate) {
+        return scheduleRepository.findAllSchedules(name, updateDate);
+    }
+
+    @Override
+    public ScheduleResponseDto getScheduleById(Long id) {
+        return scheduleRepository.findScheduleByIdOrElseThrow(id);
+    }
+
+    /*삭제*/
     @Override
     public void removeScheduleById(Long id) {
         int deleteRow = scheduleRepository.removeScheduleById(id);

@@ -2,9 +2,10 @@ package com.example.scheduleapp.dto;
 
 import lombok.Getter;
 
+import java.sql.Date;
+
 @Getter
-public class ScheduleRequestDto {
-    private String todo;
+public class ScheduleGetRequestDto {
     private String createName;
-    private String password;
+    private Date updateDate;
 }
