@@ -62,8 +62,12 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     /*삭제*/
     @Override
-    public void removeScheduleById(Long id) {
-        int deleteRow = scheduleRepository.removeScheduleById(id);
+    public void removeSchedule(Long id, String password) {
+        if (password == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "password is required values.");
+        }
+
+        int deleteRow = scheduleRepository.removeSchedule(id, password);
         if (deleteRow == 0) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist schedule_id  = " + id);
         }

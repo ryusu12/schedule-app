@@ -20,5 +20,5 @@ public interface ScheduleRepository {
     int updateMemoTitle(Long id, String todo, String name, String password);
 
     /*삭제*/
-    int removeScheduleById(Long id);
+    int removeSchedule(Long id, String password);
 }

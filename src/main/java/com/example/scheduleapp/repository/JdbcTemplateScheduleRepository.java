@@ -88,8 +88,8 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
 
     /*삭제*/
     @Override
-    public int removeScheduleById(Long id) {
-        return jdbcTemplate.update("delete from schedule where schedule_id = ?", id);
+    public int removeSchedule(Long id, String password) {
+        return jdbcTemplate.update("DELETE FROM schedule WHERE schedule_id = ? AND password = ?", id, password);
     }
 
     /*Mapper*/

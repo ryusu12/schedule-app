@@ -1,5 +1,6 @@
 package com.example.scheduleapp.controller;
 
+import com.example.scheduleapp.dto.ScheduleDeleteRequestDto;
 import com.example.scheduleapp.dto.SchedulePostAndPatchRequestDto;
 import com.example.scheduleapp.dto.ScheduleGetRequestDto;
 import com.example.scheduleapp.dto.ScheduleResponseDto;
@@ -46,10 +47,13 @@ public class ScheduleController {
         return new ResponseEntity<>(scheduleService.updateSchedule(id, requestDto.getTodo(), requestDto.getCreateName(), requestDto.getPassword()), HttpStatus.OK);
     }
 
-    /*todo: 테스트용 - 추후 요구사항에 맞게 수정해야함*/
+    /*삭제*/
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteScheduleById(@PathVariable Long id) {
-        scheduleService.removeScheduleById(id);
+    public ResponseEntity<Void> deleteScheduleById(
+            @PathVariable Long id,
+            @RequestBody ScheduleDeleteRequestDto requestDto
+    ) {
+        scheduleService.removeSchedule(id, requestDto.getPassword());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
