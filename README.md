@@ -6,4 +6,9 @@
 
 ## 📑 API 명세서
 
-[API 명세서](https://rsuyn.notion.site/spring-schedule-app?v=1eddb7a29f54808285da000c111fa854&pvs=4)
+[API 명세서](https://documenter.getpostman.com/view/44733463/2sB2jAaTZM)
+
+## 🗂️ ERD
+
+![img.png](README/ERD.png)
+![img.png](README/sqlDiagram.png)
