@@ -10,5 +10,5 @@
 
 ## 🗂️ ERD
 
-![img.png](README/ERD.png)
-![img.png](README/sqlDiagram.png)
+![imgERD.png](readme/imgERD.png)
+![sql.png](readme/sql.png)
