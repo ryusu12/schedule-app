@@ -1,6 +1,6 @@
 package com.example.scheduleapp.controller;
 
-import com.example.scheduleapp.dto.ScheduleCreateRequestDto;
+import com.example.scheduleapp.dto.SchedulePostAndPatchRequestDto;
 import com.example.scheduleapp.dto.ScheduleGetRequestDto;
 import com.example.scheduleapp.dto.ScheduleResponseDto;
 import com.example.scheduleapp.service.ScheduleService;
@@ -22,7 +22,7 @@ public class ScheduleController {
 
     /*생성*/
     @PostMapping()
-    public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody ScheduleCreateRequestDto requestDto) {
+    public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody SchedulePostAndPatchRequestDto requestDto) {
         return new ResponseEntity<>(scheduleService.saveSchedule(requestDto.getTodo(), requestDto.getCreateName(), requestDto.getPassword()), HttpStatus.CREATED);
     }
 
@@ -35,6 +35,15 @@ public class ScheduleController {
     @GetMapping("/{id}")
     public ResponseEntity<ScheduleResponseDto> getScheduleById(@PathVariable Long id) {
         return new ResponseEntity<>(scheduleService.getScheduleById(id), HttpStatus.OK);
+    }
+
+    /*수정*/
+    @PatchMapping("/{id}")
+    public ResponseEntity<ScheduleResponseDto> updateSchedule(
+            @PathVariable Long id,
+            @RequestBody SchedulePostAndPatchRequestDto requestDto
+    ) {
+        return new ResponseEntity<>(scheduleService.updateSchedule(id, requestDto.getTodo(), requestDto.getCreateName(), requestDto.getPassword()), HttpStatus.OK);
     }
 
     /*todo: 테스트용 - 추후 요구사항에 맞게 수정해야함*/

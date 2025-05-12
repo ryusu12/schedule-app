@@ -16,6 +16,9 @@ public interface ScheduleRepository {
 
     ScheduleResponseDto findScheduleByIdOrElseThrow(Long id);
 
+    /*수정*/
+    int updateMemoTitle(Long id, String todo, String name, String password);
+
     /*삭제*/
     int removeScheduleById(Long id);
 }

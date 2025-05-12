@@ -65,6 +65,27 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         return result.stream().findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist schedule_id = " + id));
     }
 
+    /*수정*/
+    @Override
+    public int updateMemoTitle(Long id, String todo, String name, String password) {
+        StringBuilder sql = new StringBuilder("UPDATE schedule SET update_date = NOW()");
+        List<Object> params = new ArrayList<>();
+
+        if (todo != null) {
+            sql.append(", todo = ?");
+            params.add(todo);
+        }
+        if (name != null) {
+            sql.append(", create_name = ?");
+            params.add(name);
+        }
+        sql.append(" WHERE schedule_id = ? AND password = ?");
+        params.add(id);
+        params.add(password);
+
+        return jdbcTemplate.update(sql.toString(), params.toArray());
+    }
+
     /*삭제*/
     @Override
     public int removeScheduleById(Long id) {
