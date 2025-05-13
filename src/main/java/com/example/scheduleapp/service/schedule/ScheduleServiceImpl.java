@@ -1,10 +1,12 @@
 package com.example.scheduleapp.service.schedule;
 
-import com.example.scheduleapp.dto.ScheduleResponseDto;
+import com.example.scheduleapp.dto.response.ScheduleResponseDto;
 import com.example.scheduleapp.entity.Schedule;
 import com.example.scheduleapp.entity.User;
 import com.example.scheduleapp.exception.NotFoundScheduleException;
 import com.example.scheduleapp.repository.schedule.ScheduleRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,8 +31,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     //조회
     @Override
-    public List<ScheduleResponseDto> getAllSchedules(String name, Long userId, Date updateDate) {
-        return scheduleRepository.findAllSchedules(name, userId, updateDate);
+    public List<ScheduleResponseDto> getAllSchedules(String name, Long userId, Date updateDate, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return scheduleRepository.findAllSchedules(name, userId, updateDate, pageable);
     }
 
     @Override

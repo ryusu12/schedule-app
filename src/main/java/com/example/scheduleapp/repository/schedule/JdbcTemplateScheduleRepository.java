@@ -1,8 +1,9 @@
 package com.example.scheduleapp.repository.schedule;
 
-import com.example.scheduleapp.dto.ScheduleResponseDto;
+import com.example.scheduleapp.dto.response.ScheduleResponseDto;
 import com.example.scheduleapp.entity.Schedule;
 import com.example.scheduleapp.exception.NotFoundScheduleException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -42,7 +43,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
 
     //조회
     @Override
-    public List<ScheduleResponseDto> findAllSchedules(String name, Long userId, Date updateDate) {
+    public List<ScheduleResponseDto> findAllSchedules(String name, Long userId, Date updateDate, Pageable pageable) {
         StringBuilder sql = new StringBuilder("SELECT * FROM schedule WHERE 1=1 ");
         List<Object> params = new ArrayList<>();
 
@@ -58,7 +59,9 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
             sql.append("AND user_id = ? ");
             params.add(userId);
         }
-        sql.append("ORDER BY update_date DESC");
+        sql.append("ORDER BY update_date DESC LIMIT ? OFFSET ?");
+        params.add(pageable.getPageSize());
+        params.add(pageable.getOffset());
 
         return jdbcTemplate.query(sql.toString(), scheduleRowMapper(), params.toArray());
     }
