@@ -2,26 +2,24 @@ package com.example.scheduleapp.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.sql.Date;
 import java.time.LocalDate;
 
 @Getter
 @AllArgsConstructor
-public class Schedule {
-    private Long scheduleId;
+public class User {
+    @Setter
     private Long userId;
-    private String todo;
-    private String createName;
-    private String password;
+    private String name;
+    private String email;
     private Date createDate;
     private Date updateDate;
 
-    public Schedule(String todo, User user, String password) {
-        this.todo = todo;
-        this.userId = user.getUserId();
-        this.createName = user.getName();
-        this.password = password;
+    public User(String name, String email) {
+        this.name = name;
+        this.email = email;
         this.createDate = Date.valueOf(LocalDate.now());
         this.updateDate = Date.valueOf(LocalDate.now());
     }
