@@ -22,7 +22,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    /*생성*/
+    //생성
     @Override
     public ScheduleResponseDto saveSchedule(Schedule schedule) {
         SimpleJdbcInsert insert = new SimpleJdbcInsert(this.jdbcTemplate);
@@ -40,7 +40,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         return new ScheduleResponseDto(key.longValue(), schedule);
     }
 
-    /*조회*/
+    //조회
     @Override
     public List<ScheduleResponseDto> findAllSchedules(String name, Date updateDate) {
         StringBuilder sql = new StringBuilder("SELECT * FROM schedule WHERE 1=1 ");
@@ -61,11 +61,11 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
 
     @Override
     public ScheduleResponseDto findScheduleByIdOrElseThrow(Long id) {
-        List<ScheduleResponseDto> result = jdbcTemplate.query("select * from schedule where schedule_id = ? ORDER BY update_date DESC", scheduleRowMapper(), id);
+        List<ScheduleResponseDto> result = jdbcTemplate.query("SELECT * FROM schedule WHERE schedule_id = ? ORDER BY update_date DESC", scheduleRowMapper(), id);
         return result.stream().findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist schedule_id = " + id));
     }
 
-    /*수정*/
+    //수정
     @Override
     public int updateMemoTitle(Long id, String todo, String name, String password) {
         StringBuilder sql = new StringBuilder("UPDATE schedule SET update_date = NOW()");
@@ -86,7 +86,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         return jdbcTemplate.update(sql.toString(), params.toArray());
     }
 
-    /*삭제*/
+    //삭제
     @Override
     public int removeSchedule(Long id, String password) {
         return jdbcTemplate.update("DELETE FROM schedule WHERE schedule_id = ? AND password = ?", id, password);

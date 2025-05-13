@@ -21,13 +21,13 @@ public class ScheduleController {
         this.scheduleService = scheduleService;
     }
 
-    /*생성*/
+    //생성
     @PostMapping()
     public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody SchedulePostAndPatchRequestDto requestDto) {
         return new ResponseEntity<>(scheduleService.saveSchedule(requestDto.getTodo(), requestDto.getCreateName(), requestDto.getPassword()), HttpStatus.CREATED);
     }
 
-    /*조회*/
+    //조회
     @GetMapping()
     public ResponseEntity<List<ScheduleResponseDto>> getAllSchedules(@RequestBody ScheduleGetRequestDto requestDto) {
         return new ResponseEntity<>(scheduleService.getAllSchedules(requestDto.getCreateName(), requestDto.getUpdateDate()), HttpStatus.OK);
@@ -38,7 +38,7 @@ public class ScheduleController {
         return new ResponseEntity<>(scheduleService.getScheduleById(id), HttpStatus.OK);
     }
 
-    /*수정*/
+    //수정
     @PatchMapping("/{id}")
     public ResponseEntity<ScheduleResponseDto> updateSchedule(
             @PathVariable Long id,
@@ -47,9 +47,9 @@ public class ScheduleController {
         return new ResponseEntity<>(scheduleService.updateSchedule(id, requestDto.getTodo(), requestDto.getCreateName(), requestDto.getPassword()), HttpStatus.OK);
     }
 
-    /*삭제*/
+    //삭제
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteScheduleById(
+    public ResponseEntity<Void> deleteSchedule(
             @PathVariable Long id,
             @RequestBody ScheduleDeleteRequestDto requestDto
     ) {

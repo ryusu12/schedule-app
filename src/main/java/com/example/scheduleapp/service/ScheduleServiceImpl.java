@@ -20,7 +20,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         this.scheduleRepository = scheduleRepository;
     }
 
-    /*생성*/
+    //생성
     @Override
     public ScheduleResponseDto saveSchedule(String todo, String name, String password) {
         if (todo == null || name == null || password == null) {
@@ -30,7 +30,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         return scheduleRepository.saveSchedule(schedule);
     }
 
-    /*조회*/
+    //조회
     @Override
     public List<ScheduleResponseDto> getAllSchedules(String name, Date updateDate) {
         return scheduleRepository.findAllSchedules(name, updateDate);
@@ -41,7 +41,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         return scheduleRepository.findScheduleByIdOrElseThrow(id);
     }
 
-    /*수정*/
+    //수정
     @Transactional
     @Override
     public ScheduleResponseDto updateSchedule(Long id, String todo, String name, String password) {
@@ -60,7 +60,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         return scheduleRepository.findScheduleByIdOrElseThrow(id);
     }
 
-    /*삭제*/
+    //삭제
     @Override
     public void removeSchedule(Long id, String password) {
         if (password == null) {
