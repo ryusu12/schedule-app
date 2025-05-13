@@ -1,7 +1,6 @@
 package com.example.scheduleapp.controller;
 
 import com.example.scheduleapp.dto.request.ScheduleDeleteRequestDto;
-import com.example.scheduleapp.dto.request.ScheduleGetRequestDto;
 import com.example.scheduleapp.dto.request.SchedulePatchRequestDto;
 import com.example.scheduleapp.dto.request.SchedulePostRequestDto;
 import com.example.scheduleapp.dto.response.ScheduleResponseDto;
@@ -13,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.util.List;
 
 @RestController
@@ -40,14 +40,14 @@ public class ScheduleController {
 
     //조회
     @GetMapping()
-    public ResponseEntity<List<ScheduleResponseDto>> getAllSchedules(@RequestBody ScheduleGetRequestDto requestDto) {
-        return new ResponseEntity<>(scheduleService.getAllSchedules(
-                requestDto.getCreateName(),
-                requestDto.getUserId(),
-                requestDto.getUpdateDate(),
-                requestDto.getPage(),
-                requestDto.getSize()
-        ), HttpStatus.OK);
+    public ResponseEntity<List<ScheduleResponseDto>> getAllSchedules(
+            @RequestParam(required = false) String createName,
+            @RequestParam(required = false) Long userId,
+            @RequestParam(required = false) Date updateDate,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return new ResponseEntity<>(scheduleService.getAllSchedules(createName, userId, updateDate, page, size), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
