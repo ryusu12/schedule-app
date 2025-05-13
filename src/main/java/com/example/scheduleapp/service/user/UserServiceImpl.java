@@ -16,7 +16,12 @@ public class UserServiceImpl implements UserService {
     //생성
     @Override
     public User saveUser(String name, String email) {
-        User user = new User(name, email);
-        return userRepository.saveUser(user);
+        User user = userRepository.findUserByNameAndEmailOrElseThrow(name, email);
+        // 같은 name과 email을 가진 작성자가 있으면 리턴
+        if (user != null) {
+            return user;
+        }
+        // 없으면 생성
+        return userRepository.saveUser(new User(name, email));
     }
 }
