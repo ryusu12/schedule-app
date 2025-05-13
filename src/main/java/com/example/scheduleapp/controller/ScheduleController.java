@@ -2,13 +2,13 @@ package com.example.scheduleapp.controller;
 
 import com.example.scheduleapp.dto.ScheduleDeleteRequestDto;
 import com.example.scheduleapp.dto.SchedulePostAndPatchRequestDto;
-import com.example.scheduleapp.dto.ScheduleGetRequestDto;
 import com.example.scheduleapp.dto.ScheduleResponseDto;
 import com.example.scheduleapp.service.ScheduleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.util.List;
 
 @RestController
@@ -29,8 +29,11 @@ public class ScheduleController {
 
     //조회
     @GetMapping()
-    public ResponseEntity<List<ScheduleResponseDto>> getAllSchedules(@RequestBody ScheduleGetRequestDto requestDto) {
-        return new ResponseEntity<>(scheduleService.getAllSchedules(requestDto.getCreateName(), requestDto.getUpdateDate()), HttpStatus.OK);
+    public ResponseEntity<List<ScheduleResponseDto>> getAllSchedules(
+            @RequestParam(required = false) String createName,
+            @RequestParam(required = false) Date updateDate
+    ) {
+        return new ResponseEntity<>(scheduleService.getAllSchedules(createName, updateDate), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
