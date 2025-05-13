@@ -2,9 +2,9 @@ package com.example.scheduleapp.controller;
 
 import com.example.scheduleapp.dto.*;
 import com.example.scheduleapp.entity.User;
-import com.example.scheduleapp.service.CheckValueService;
 import com.example.scheduleapp.service.schedule.ScheduleService;
 import com.example.scheduleapp.service.user.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,23 +17,18 @@ public class ScheduleController {
 
     private final ScheduleService scheduleService;
     private final UserService userService;
-    private final CheckValueService checkValueService;
 
     public ScheduleController(
             ScheduleService scheduleService,
-            UserService userService,
-            CheckValueService checkValueService
+            UserService userService
     ) {
         this.scheduleService = scheduleService;
         this.userService = userService;
-        this.checkValueService = checkValueService;
     }
 
     //생성
     @PostMapping()
-    public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody SchedulePostRequestDto requestDto) {
-        //미리 입력값 검사하기
-        checkValueService.checkPostRequestIsNull(requestDto);
+    public ResponseEntity<ScheduleResponseDto> createSchedule(@Valid @RequestBody SchedulePostRequestDto requestDto) {
         //사용자를 생성한 뒤, 일정 생성
         User user = userService.saveUser(requestDto.getCreateName(), requestDto.getEmail());
         return new ResponseEntity<>(scheduleService.saveSchedule(requestDto.getTodo(), user, requestDto.getPassword()), HttpStatus.CREATED);
@@ -54,9 +49,8 @@ public class ScheduleController {
     @PatchMapping("/{id}")
     public ResponseEntity<ScheduleResponseDto> updateSchedule(
             @PathVariable Long id,
-            @RequestBody SchedulePatchRequestDto requestDto
+            @Valid @RequestBody SchedulePatchRequestDto requestDto
     ) {
-        checkValueService.checkPasswordIsNull(requestDto.getPassword());
         return new ResponseEntity<>(scheduleService.updateSchedule(id, requestDto.getTodo(), requestDto.getCreateName(), requestDto.getPassword()), HttpStatus.OK);
     }
 
@@ -64,11 +58,9 @@ public class ScheduleController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSchedule(
             @PathVariable Long id,
-            @RequestBody ScheduleDeleteRequestDto requestDto
+            @Valid @RequestBody ScheduleDeleteRequestDto requestDto
     ) {
-        checkValueService.checkPasswordIsNull(requestDto.getPassword());
         scheduleService.removeSchedule(id, requestDto.getPassword());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
 }

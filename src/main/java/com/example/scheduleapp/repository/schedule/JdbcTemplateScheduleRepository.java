@@ -72,13 +72,10 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
     //수정
     @Override
     public int updateMemoTitle(Long id, String todo, String name, String password) {
-        StringBuilder sql = new StringBuilder("UPDATE schedule SET update_date = NOW()");
+        StringBuilder sql = new StringBuilder("UPDATE schedule SET update_date = NOW(), todo = ?");
         List<Object> params = new ArrayList<>();
 
-        if (todo != null) {
-            sql.append(", todo = ?");
-            params.add(todo);
-        }
+        params.add(todo);
         if (name != null) {
             sql.append(", create_name = ?");
             params.add(name);

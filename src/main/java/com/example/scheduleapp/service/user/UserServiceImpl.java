@@ -3,6 +3,7 @@ package com.example.scheduleapp.service.user;
 import com.example.scheduleapp.entity.User;
 import com.example.scheduleapp.repository.user.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -14,6 +15,7 @@ public class UserServiceImpl implements UserService {
     }
 
     //생성
+    @Transactional
     @Override
     public User saveUser(String name, String email) {
         User user = userRepository.findUserByNameAndEmailOrElseThrow(name, email);
