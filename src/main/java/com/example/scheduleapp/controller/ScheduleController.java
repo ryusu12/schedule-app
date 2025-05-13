@@ -1,6 +1,10 @@
 package com.example.scheduleapp.controller;
 
-import com.example.scheduleapp.dto.*;
+import com.example.scheduleapp.dto.request.ScheduleDeleteRequestDto;
+import com.example.scheduleapp.dto.request.ScheduleGetRequestDto;
+import com.example.scheduleapp.dto.request.SchedulePatchRequestDto;
+import com.example.scheduleapp.dto.request.SchedulePostRequestDto;
+import com.example.scheduleapp.dto.response.ScheduleResponseDto;
 import com.example.scheduleapp.entity.User;
 import com.example.scheduleapp.service.schedule.ScheduleService;
 import com.example.scheduleapp.service.user.UserService;
@@ -37,7 +41,13 @@ public class ScheduleController {
     //조회
     @GetMapping()
     public ResponseEntity<List<ScheduleResponseDto>> getAllSchedules(@RequestBody ScheduleGetRequestDto requestDto) {
-        return new ResponseEntity<>(scheduleService.getAllSchedules(requestDto.getCreateName(), requestDto.getUserId(), requestDto.getUpdateDate()), HttpStatus.OK);
+        return new ResponseEntity<>(scheduleService.getAllSchedules(
+                requestDto.getCreateName(),
+                requestDto.getUserId(),
+                requestDto.getUpdateDate(),
+                requestDto.getPage(),
+                requestDto.getSize()
+        ), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

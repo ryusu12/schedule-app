@@ -1,6 +1,6 @@
 package com.example.scheduleapp.service.schedule;
 
-import com.example.scheduleapp.dto.ScheduleResponseDto;
+import com.example.scheduleapp.dto.response.ScheduleResponseDto;
 import com.example.scheduleapp.entity.User;
 
 import java.util.Date;
@@ -12,7 +12,7 @@ public interface ScheduleService {
     ScheduleResponseDto saveSchedule(String todo, User user, String password);
 
     //조회
-    List<ScheduleResponseDto> getAllSchedules(String name, Long userId, Date updateDate);
+    List<ScheduleResponseDto> getAllSchedules(String name, Long userId, Date updateDate, int page, int size);
 
     ScheduleResponseDto getScheduleById(Long id);
 
