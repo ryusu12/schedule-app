@@ -2,6 +2,7 @@ package com.example.scheduleapp.controller;
 
 import com.example.scheduleapp.dto.*;
 import com.example.scheduleapp.entity.User;
+import com.example.scheduleapp.service.CheckValueService;
 import com.example.scheduleapp.service.schedule.ScheduleService;
 import com.example.scheduleapp.service.user.UserService;
 import org.springframework.http.HttpStatus;
@@ -16,15 +17,23 @@ public class ScheduleController {
 
     private final ScheduleService scheduleService;
     private final UserService userService;
+    private final CheckValueService checkValueService;
 
-    public ScheduleController(ScheduleService scheduleService, UserService userService) {
+    public ScheduleController(
+            ScheduleService scheduleService,
+            UserService userService,
+            CheckValueService checkValueService
+    ) {
         this.scheduleService = scheduleService;
         this.userService = userService;
+        this.checkValueService = checkValueService;
     }
 
     //생성
     @PostMapping()
     public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody SchedulePostRequestDto requestDto) {
+        //미리 입력값 검사하기
+        checkValueService.checkPostRequestIsNull(requestDto);
         //사용자를 생성한 뒤, 일정 생성
         User user = userService.saveUser(requestDto.getCreateName(), requestDto.getEmail());
         return new ResponseEntity<>(scheduleService.saveSchedule(requestDto.getTodo(), user, requestDto.getPassword()), HttpStatus.CREATED);
@@ -47,6 +56,7 @@ public class ScheduleController {
             @PathVariable Long id,
             @RequestBody SchedulePatchRequestDto requestDto
     ) {
+        checkValueService.checkPasswordIsNull(requestDto.getPassword());
         return new ResponseEntity<>(scheduleService.updateSchedule(id, requestDto.getTodo(), requestDto.getCreateName(), requestDto.getPassword()), HttpStatus.OK);
     }
 
@@ -56,6 +66,7 @@ public class ScheduleController {
             @PathVariable Long id,
             @RequestBody ScheduleDeleteRequestDto requestDto
     ) {
+        checkValueService.checkPasswordIsNull(requestDto.getPassword());
         scheduleService.removeSchedule(id, requestDto.getPassword());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

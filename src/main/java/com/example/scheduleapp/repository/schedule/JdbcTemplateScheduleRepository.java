@@ -2,13 +2,12 @@ package com.example.scheduleapp.repository.schedule;
 
 import com.example.scheduleapp.dto.ScheduleResponseDto;
 import com.example.scheduleapp.entity.Schedule;
-import org.springframework.http.HttpStatus;
+import com.example.scheduleapp.exception.NotFoundScheduleException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.sql.DataSource;
 import java.util.*;
@@ -67,7 +66,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
     @Override
     public ScheduleResponseDto findScheduleByIdOrElseThrow(Long id) {
         List<ScheduleResponseDto> result = jdbcTemplate.query("SELECT * FROM schedule WHERE schedule_id = ? ORDER BY update_date DESC", scheduleRowMapper(), id);
-        return result.stream().findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist schedule_id = " + id));
+        return result.stream().findAny().orElseThrow(() -> new NotFoundScheduleException("Does not exist schedule"));
     }
 
     //수정

@@ -3,11 +3,11 @@ package com.example.scheduleapp.service.schedule;
 import com.example.scheduleapp.dto.ScheduleResponseDto;
 import com.example.scheduleapp.entity.Schedule;
 import com.example.scheduleapp.entity.User;
+import com.example.scheduleapp.exception.InvalidRequestValuesException;
+import com.example.scheduleapp.exception.NotFoundScheduleException;
 import com.example.scheduleapp.repository.schedule.ScheduleRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
 import java.util.List;
@@ -24,9 +24,6 @@ public class ScheduleServiceImpl implements ScheduleService {
     //생성
     @Override
     public ScheduleResponseDto saveSchedule(String todo, User user, String password) {
-        if (todo == null || password == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "todo, password are required values.");
-        }
         Schedule schedule = new Schedule(todo, user, password);
         return scheduleRepository.saveSchedule(schedule);
     }
@@ -47,15 +44,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public ScheduleResponseDto updateSchedule(Long id, String todo, String name, String password) {
         if (todo == null && name == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "todo, name are required values.");
+            throw new InvalidRequestValuesException("todo, name are required values.");
         }
-        if (password == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "password is required values.");
-        }
-
         int updatedRow = scheduleRepository.updateMemoTitle(id, todo, name, password);
         if (updatedRow == 0) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist schedule_id = " + id);
+            throw new NotFoundScheduleException("Does not exist schedule");
         }
 
         return scheduleRepository.findScheduleByIdOrElseThrow(id);
@@ -64,13 +57,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     //삭제
     @Override
     public void removeSchedule(Long id, String password) {
-        if (password == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "password is required values.");
-        }
-
         int deleteRow = scheduleRepository.removeSchedule(id, password);
         if (deleteRow == 0) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist schedule_id  = " + id);
+            throw new NotFoundScheduleException("Does not exist schedule");
         }
     }
 }
