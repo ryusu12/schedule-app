@@ -3,7 +3,6 @@ package com.example.scheduleapp.service.schedule;
 import com.example.scheduleapp.dto.ScheduleResponseDto;
 import com.example.scheduleapp.entity.Schedule;
 import com.example.scheduleapp.entity.User;
-import com.example.scheduleapp.exception.InvalidRequestValuesException;
 import com.example.scheduleapp.exception.NotFoundScheduleException;
 import com.example.scheduleapp.repository.schedule.ScheduleRepository;
 import org.springframework.stereotype.Service;
@@ -43,14 +42,10 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Transactional
     @Override
     public ScheduleResponseDto updateSchedule(Long id, String todo, String name, String password) {
-        if (todo == null && name == null) {
-            throw new InvalidRequestValuesException("todo, name are required values.");
-        }
         int updatedRow = scheduleRepository.updateMemoTitle(id, todo, name, password);
         if (updatedRow == 0) {
             throw new NotFoundScheduleException("Does not exist schedule");
         }
-
         return scheduleRepository.findScheduleByIdOrElseThrow(id);
     }
 
