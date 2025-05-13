@@ -1,8 +1,9 @@
-package com.example.scheduleapp.service;
+package com.example.scheduleapp.service.schedule;
 
 import com.example.scheduleapp.dto.ScheduleResponseDto;
 import com.example.scheduleapp.entity.Schedule;
-import com.example.scheduleapp.repository.ScheduleRepository;
+import com.example.scheduleapp.entity.User;
+import com.example.scheduleapp.repository.schedule.ScheduleRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,18 +23,18 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     //생성
     @Override
-    public ScheduleResponseDto saveSchedule(String todo, String name, String password) {
-        if (todo == null || name == null || password == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "todo, name, password are required values.");
+    public ScheduleResponseDto saveSchedule(String todo, User user, String password) {
+        if (todo == null || password == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "todo, password are required values.");
         }
-        Schedule schedule = new Schedule(todo, name, password);
+        Schedule schedule = new Schedule(todo, user, password);
         return scheduleRepository.saveSchedule(schedule);
     }
 
     //조회
     @Override
-    public List<ScheduleResponseDto> getAllSchedules(String name, Date updateDate) {
-        return scheduleRepository.findAllSchedules(name, updateDate);
+    public List<ScheduleResponseDto> getAllSchedules(String name, Long userId, Date updateDate) {
+        return scheduleRepository.findAllSchedules(name, userId, updateDate);
     }
 
     @Override

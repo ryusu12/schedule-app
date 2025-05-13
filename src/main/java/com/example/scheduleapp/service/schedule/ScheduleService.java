@@ -1,6 +1,7 @@
-package com.example.scheduleapp.service;
+package com.example.scheduleapp.service.schedule;
 
 import com.example.scheduleapp.dto.ScheduleResponseDto;
+import com.example.scheduleapp.entity.User;
 
 import java.util.Date;
 import java.util.List;
@@ -8,10 +9,10 @@ import java.util.List;
 public interface ScheduleService {
 
     //생성
-    ScheduleResponseDto saveSchedule(String todo, String name, String password);
+    ScheduleResponseDto saveSchedule(String todo, User user, String password);
 
     //조회
-    List<ScheduleResponseDto> getAllSchedules(String name, Date updateDate);
+    List<ScheduleResponseDto> getAllSchedules(String name, Long userId, Date updateDate);
 
     ScheduleResponseDto getScheduleById(Long id);
 

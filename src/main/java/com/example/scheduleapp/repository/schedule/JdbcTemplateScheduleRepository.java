@@ -1,4 +1,4 @@
-package com.example.scheduleapp.repository;
+package com.example.scheduleapp.repository.schedule;
 
 import com.example.scheduleapp.dto.ScheduleResponseDto;
 import com.example.scheduleapp.entity.Schedule;
@@ -30,6 +30,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("todo", schedule.getTodo());
+        parameters.put("user_id", schedule.getUserId());
         parameters.put("create_name", schedule.getCreateName());
         parameters.put("password", schedule.getPassword());
         parameters.put("create_date", schedule.getCreateDate());
@@ -42,7 +43,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
 
     //조회
     @Override
-    public List<ScheduleResponseDto> findAllSchedules(String name, Date updateDate) {
+    public List<ScheduleResponseDto> findAllSchedules(String name, Long userId, Date updateDate) {
         StringBuilder sql = new StringBuilder("SELECT * FROM schedule WHERE 1=1 ");
         List<Object> params = new ArrayList<>();
 
@@ -53,6 +54,10 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         if (updateDate != null) {
             sql.append("AND update_date = ? ");
             params.add(updateDate);
+        }
+        if (userId != null) {
+            sql.append("AND user_id = ? ");
+            params.add(userId);
         }
         sql.append("ORDER BY update_date DESC");
 
@@ -92,7 +97,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         return jdbcTemplate.update("DELETE FROM schedule WHERE schedule_id = ? AND password = ?", id, password);
     }
 
-    /*Mapper*/
+    //Mapper
     private RowMapper<ScheduleResponseDto> scheduleRowMapper() {
         return (rs, rowNum) -> new ScheduleResponseDto(
                 rs.getLong("schedule_id"),

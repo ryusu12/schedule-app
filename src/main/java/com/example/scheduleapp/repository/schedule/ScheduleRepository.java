@@ -1,4 +1,4 @@
-package com.example.scheduleapp.repository;
+package com.example.scheduleapp.repository.schedule;
 
 import com.example.scheduleapp.dto.ScheduleResponseDto;
 import com.example.scheduleapp.entity.Schedule;
@@ -12,7 +12,7 @@ public interface ScheduleRepository {
     ScheduleResponseDto saveSchedule(Schedule schedule);
 
     //조회
-    List<ScheduleResponseDto> findAllSchedules(String name, Date updateDate);
+    List<ScheduleResponseDto> findAllSchedules(String name, Long userId, Date updateDate);
 
     ScheduleResponseDto findScheduleByIdOrElseThrow(Long id);
 
