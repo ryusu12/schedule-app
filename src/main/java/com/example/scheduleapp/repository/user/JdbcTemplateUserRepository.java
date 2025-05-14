@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,8 +52,8 @@ public class JdbcTemplateUserRepository implements UserRepository {
                 rs.getLong("user_id"),
                 rs.getString("name"),
                 rs.getString("email"),
-                rs.getDate("create_date"),
-                rs.getDate("update_date")
+                rs.getObject("create_date", LocalDateTime.class),
+                rs.getObject("update_date", LocalDateTime.class)
         );
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Repository
@@ -52,7 +53,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
             params.add(name);
         }
         if (updateDate != null) {
-            sql.append("AND update_date = ? ");
+            sql.append("AND DATE(update_date) = ? ");
             params.add(updateDate);
         }
         if (userId != null) {
@@ -100,11 +101,12 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
     private RowMapper<ScheduleResponseDto> scheduleRowMapper() {
         return (rs, rowNum) -> new ScheduleResponseDto(
                 rs.getLong("schedule_id"),
+                rs.getLong("user_id"),
                 rs.getString("todo"),
                 rs.getString("create_name"),
                 rs.getString("password"),
-                rs.getDate("create_date"),
-                rs.getDate("update_date")
+                rs.getObject("create_date", LocalDateTime.class),
+                rs.getObject("update_date", LocalDateTime.class)
         );
     }
 }
