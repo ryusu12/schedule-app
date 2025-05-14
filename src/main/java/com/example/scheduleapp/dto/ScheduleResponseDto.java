@@ -4,7 +4,7 @@ import com.example.scheduleapp.entity.Schedule;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
@@ -13,8 +13,8 @@ public class ScheduleResponseDto {
     private String todo;
     private String createName;
     private String password;
-    private Date createDate;
-    private Date updateDate;
+    private LocalDateTime createDate;
+    private LocalDateTime updateDate;
 
     public ScheduleResponseDto(Long id, Schedule schedule) {
         this.scheduleId = id;
