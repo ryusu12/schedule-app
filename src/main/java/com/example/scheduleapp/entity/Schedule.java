@@ -3,8 +3,7 @@ package com.example.scheduleapp.entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.sql.Date;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
@@ -14,15 +13,15 @@ public class Schedule {
     private String todo;
     private String createName;
     private String password;
-    private Date createDate;
-    private Date updateDate;
+    private LocalDateTime createDate;
+    private LocalDateTime updateDate;
 
     public Schedule(String todo, User user, String password) {
         this.todo = todo;
         this.userId = user.getUserId();
         this.createName = user.getName();
         this.password = password;
-        this.createDate = Date.valueOf(LocalDate.now());
-        this.updateDate = Date.valueOf(LocalDate.now());
+        this.createDate = LocalDateTime.now();
+        this.updateDate = LocalDateTime.now();
     }
 }
